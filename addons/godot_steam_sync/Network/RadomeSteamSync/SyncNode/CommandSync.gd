@@ -12,5 +12,3 @@ func start_scene(scene : String):
 	get_parent().add_child(instance)
 	instance.change(scene)
 	
-func set_dungeon_seed(seed) -> void:
-	NetworkManager.DUNGEON_SEED = seed

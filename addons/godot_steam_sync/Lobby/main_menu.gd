@@ -1,4 +1,3 @@
-
 extends Control
 
 @onready var online_text = $OnlineLbl

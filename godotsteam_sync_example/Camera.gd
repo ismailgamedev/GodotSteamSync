@@ -6,7 +6,7 @@ func make_owner():
 	IS_OWNER = true
 	current = true
 
-
+#region Variables
 # Modifier keys' speed multiplier
 const SHIFT_MULTIPLIER = 2.5
 const ALT_MULTIPLIER = 1.0 / SHIFT_MULTIPLIER
@@ -33,13 +33,13 @@ var _q = false
 var _e = false
 var _shift = false
 var _alt = false
+#endregion
 
 func _input(event):
 	if IS_OWNER:
 		# Receives mouse motion
 		if event is InputEventMouseMotion:
-			_mouse_position = event.relative
-		
+			_mouse_position = event.relative	
 		# Receives mouse button input
 		if event is InputEventMouseButton:
 			match event.button_index:
@@ -49,7 +49,6 @@ func _input(event):
 					_vel_multiplier = clamp(_vel_multiplier * 1.1, 0.2, 20)
 				MOUSE_BUTTON_WHEEL_DOWN: # Decereases max velocity
 					_vel_multiplier = clamp(_vel_multiplier / 1.1, 0.2, 20)
-
 		# Receives key input
 		if event is InputEventKey:
 			match event.keycode:
@@ -65,7 +64,6 @@ func _input(event):
 					_q = event.pressed
 				KEY_E:
 					_e = event.pressed
-
 # Updates mouselook and movement every frame
 func _process(delta):
 	if IS_OWNER:
@@ -100,7 +98,6 @@ func _update_movement(delta):
 		_velocity.z = clamp(_velocity.z + offset.z, -_vel_multiplier, _vel_multiplier)
 	
 		translate(_velocity * delta * speed_multi)
-
 # Updates mouse look 
 func _update_mouselook():
 	# Only rotates mouse if the mouse is captured

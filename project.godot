@@ -28,7 +28,7 @@ project/assembly_name="GodotSteamSync"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_steam_sync/plugin.cfg", "res://addons/plugin_refresher/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot_steam_sync/plugin.cfg")
 
 [input]
 

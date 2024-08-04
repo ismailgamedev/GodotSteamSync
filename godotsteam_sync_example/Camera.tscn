@@ -15,16 +15,15 @@ script = ExtResource("1_rk4c6")
 [node name="TransformSync" type="Node" parent="." node_paths=PackedStringArray("object_player")]
 script = ExtResource("2_0iynb")
 object_player = NodePath("..")
-Rotation = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.693984, 0.530421)
 mesh = SubResource("CapsuleMesh_75ugj")
 
-[node name="VoiceSystem" type="Node" parent="." node_paths=PackedStringArray("audio_node")]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamGenerator_xrib1")
+
+[node name="VoiceSync" type="Node" parent="." node_paths=PackedStringArray("audio_node")]
 script = ExtResource("3_g0vfu")
 loopback_enabled = true
 audio_node = NodePath("../AudioStreamPlayer")
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = SubResource("AudioStreamGenerator_xrib1")

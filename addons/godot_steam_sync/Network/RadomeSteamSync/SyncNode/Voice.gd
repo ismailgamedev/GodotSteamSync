@@ -1,5 +1,5 @@
 extends Synchronizer 
-class_name VoiceSystem 
+class_name VoiceSync 
 
 var current_sample_rate: int = 48000
 var local_playback : AudioStreamGeneratorPlayback = null
