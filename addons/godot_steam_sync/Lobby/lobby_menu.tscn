@@ -1,0 +1,174 @@
+[gd_scene load_steps=2 format=3 uid="uid://cliutsom3dxmu"]
+
+[ext_resource type="Script" path="res://addons/godot_steam_sync/Lobby/lobby.gd" id="1_2lhov"]
+
+[node name="LobbyMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2lhov")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MembersPnl" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -276.0
+offset_top = -262.0
+offset_right = -10.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="MembersPnl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MembersPnl/MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MembersPnl/MarginContainer/ScrollContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="CreateLobbyCont" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -143.0
+offset_top = -162.0
+offset_right = 143.0
+offset_bottom = 162.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LobbyNameTxt" type="TextEdit" parent="CreateLobbyCont"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+placeholder_text = "Lobby Name"
+scroll_smooth = true
+
+[node name="LobbyVisibilityBtn" type="OptionButton" parent="CreateLobbyCont"]
+custom_minimum_size = Vector2(300, 35)
+layout_mode = 2
+item_count = 4
+selected = 2
+popup/item_0/text = "PRIVATE"
+popup/item_0/id = 0
+popup/item_1/text = "FRIENDS ONLY"
+popup/item_1/id = 1
+popup/item_2/text = "PUBLIC"
+popup/item_2/id = 2
+popup/item_3/text = "INVISIBLE"
+popup/item_3/id = 3
+
+[node name="MaxMembersBtn" type="OptionButton" parent="CreateLobbyCont"]
+custom_minimum_size = Vector2(300, 35)
+layout_mode = 2
+item_count = 4
+selected = 1
+popup/item_0/text = "2"
+popup/item_0/id = 0
+popup/item_1/text = "4"
+popup/item_1/id = 1
+popup/item_2/text = "8"
+popup/item_2/id = 2
+popup/item_3/text = "16"
+popup/item_3/id = 3
+
+[node name="CreateLobbyBtn" type="Button" parent="CreateLobbyCont"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+text = "Create Lobby"
+
+[node name="LobbyPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -171.0
+offset_top = -148.0
+offset_right = 171.0
+offset_bottom = 172.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="LobbyPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="LobbyCont" type="VBoxContainer" parent="LobbyPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="LobbyPanel/MarginContainer/LobbyCont"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+
+[node name="LobbyNameLbl" type="Label" parent="LobbyPanel/MarginContainer/LobbyCont/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 27
+text = "Lobby Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Space" type="Control" parent="LobbyPanel/MarginContainer/LobbyCont"]
+custom_minimum_size = Vector2(0, 55.06)
+layout_mode = 2
+
+[node name="ReadyBtn" type="Button" parent="LobbyPanel/MarginContainer/LobbyCont"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 33
+text = "READY"
+
+[node name="StartBtn" type="Button" parent="LobbyPanel/MarginContainer/LobbyCont"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 33
+text = "Start"
+
+[connection signal="pressed" from="CreateLobbyCont/CreateLobbyBtn" to="." method="_on_create_lobby_btn_pressed"]
+[connection signal="pressed" from="LobbyPanel/MarginContainer/LobbyCont/ReadyBtn" to="." method="_on_ready_btn_pressed"]
+[connection signal="pressed" from="LobbyPanel/MarginContainer/LobbyCont/StartBtn" to="." method="_on_start_btn_pressed"]

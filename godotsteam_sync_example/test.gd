@@ -1,0 +1,14 @@
+extends Node
+
+
+
+func _ready():
+	for player in NetworkManager.LOBBY_MEMBERS.size():
+		var instance_player : Node = NetworkManager.player.instantiate()
+		instance_player.name = str(NetworkManager.LOBBY_MEMBERS[player]["steam_id"])
+		instance_player.transform.origin = $SpawnPos.transform.origin + Vector3(player,0,0)
+		$Players.add_child(instance_player)
+		if instance_player.name == str(NetworkManager.STEAM_ID):
+			instance_player.make_owner()
+		NetworkManager.GAME_STARTED = true
+		

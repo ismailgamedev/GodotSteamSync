@@ -1,0 +1,80 @@
+[gd_scene load_steps=3 format=3 uid="uid://1d2bxfqc4m8x"]
+
+[ext_resource type="Script" path="res://addons/godot_steam_sync/Lobby/main_menu.gd" id="1_6wvtt"]
+
+[sub_resource type="SystemFont" id="SystemFont_j72ml"]
+font_names = PackedStringArray("Sylfaen")
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6wvtt")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OnlineLbl" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -49.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 0
+text = "online"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -35.0
+offset_right = 175.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayBtn" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(350, 70)
+layout_mode = 2
+text = "Play Online
+"
+
+[node name="ExitBtn" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(350, 70)
+layout_mode = 2
+text = "Quit"
+
+[node name="Titel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -249.0
+offset_top = 68.0
+offset_right = 249.0
+offset_bottom = 126.0
+grow_horizontal = 2
+theme_override_fonts/font = SubResource("SystemFont_j72ml")
+theme_override_font_sizes/font_size = 56
+text = "Mechatronauts"
+uppercase = true
+
+[connection signal="pressed" from="VBoxContainer/PlayBtn" to="." method="_on_play_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/ExitBtn" to="." method="_on_exit_btn_pressed"]

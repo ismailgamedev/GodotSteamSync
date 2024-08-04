@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://d26bfvwtqaeqw"]
+
+[ext_resource type="Script" path="res://addons/godot_steam_sync/Lobby/lobby_member.gd" id="1_vi8x1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_x51ve"]
+font_size = 10
+
+[node name="LobbyMember" type="Panel"]
+custom_minimum_size = Vector2(236, 36)
+offset_right = 236.0
+offset_bottom = 36.0
+script = ExtResource("1_vi8x1")
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Avatar" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+expand_mode = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="UsernameLbl" type="Label" parent="MarginContainer/HBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Space War Name"
+label_settings = SubResource("LabelSettings_x51ve")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ViewBtn" type="Button" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "View"
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/ViewBtn" to="." method="_on_view_btn_pressed"]

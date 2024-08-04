@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://b6cayd3b3bb5r"]
+
+[ext_resource type="Script" path="res://godotsteam_sync_example/test.gd" id="1_mynb7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ilft6"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_ryjhm"]
+sky_material = SubResource("ProceduralSkyMaterial_ilft6")
+
+[sub_resource type="Environment" id="Environment_lmp12"]
+background_mode = 2
+sky = SubResource("Sky_ryjhm")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_li3io"]
+
+[node name="Test" type="Node"]
+script = ExtResource("1_mynb7")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lmp12")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Players" type="Node3D" parent="."]
+
+[node name="SpawnPos" type="Marker3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(3.83187, 0, 0, 0, 1, 0, 0, 0, 3.64697, 0, -3.98574, 0)
+mesh = SubResource("BoxMesh_li3io")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(3.83187, 0, 0, 0, 1, 0, 0, 0, 3.64697, 8.40614, -1.16665, 0)
+mesh = SubResource("BoxMesh_li3io")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(3.83187, 0, 0, 0, 1, 0, 0, 0, 3.64697, -10.2713, -1.16665, 0)
+mesh = SubResource("BoxMesh_li3io")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(3.83187, 0, 0, 0, 1, 0, 0, 0, 3.64697, -1.87859, -1.16665, -11.606)
+mesh = SubResource("BoxMesh_li3io")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(3.83187, 0, 0, 0, 1, 0, 0, 0, 3.64697, -1.87859, -1.16665, 6.10618)
+mesh = SubResource("BoxMesh_li3io")
