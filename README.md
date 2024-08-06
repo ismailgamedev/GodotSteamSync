@@ -1,12 +1,11 @@
 # GodotSteamSync
+[![Image](https://github.com/user-attachments/assets/ae3f184e-60ca-4f36-9431-dd6d38e67134)](https://discord.gg/pp2kKyzVy9)
+
 Synchronisation system and finished lobby system for GodotSteam.
-
-
-[![Image](https://github.com/user-attachments/assets/573f1ec9-ad84-4f06-9668-f6a28cfb7675)](https://discord.gg/pp2kKyzVy9)
-
-![icon](https://github.com/user-attachments/assets/ef04a36c-db20-4004-b4c6-a16885024612)
 
 [Documentation](https://github.com/Radome-Studio/GodotSteamSync/wiki)
 [Getting Started](https://github.com/Radome-Studio/GodotSteamSync/wiki/Getting-Started)
-
 [GodotSteam](https://github.com/GodotSteam/GodotSteam)
+
+![icon](https://github.com/user-attachments/assets/ef04a36c-db20-4004-b4c6-a16885024612)
+
