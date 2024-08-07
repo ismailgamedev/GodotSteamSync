@@ -1,5 +1,6 @@
 # GodotSteamSync
-[![Discord](https://img.shields.io/discord/1185664967379267774?logo=discord&link=https%3A%2F%2Fdiscord.gg%2FN5MGC95GpP)](https://discord.gg/cm9xbJ9D)
+[![Discord](https://img.shields.io/discord/1270115535501135894?style=for-the-badge&logo=discord)
+](https://discord.gg/cm9xbJ9D)
 
 Synchronisation system and finished lobby system for GodotSteam.
 
