@@ -1,15 +1,12 @@
 @icon("res://addons/godot_steam_sync/Network/RadomeSteamSync/SyncNode/transformSyncIcon.png")
-class_name TransformSync extends Synchronizer
+class_name TransformSync3D extends Synchronizer
 
 @export_group("SETTINGS","is")
-@export var is_only_lobby_owner : bool = false ## Sadece Lobby Owner Gonderecek
-## TODO: Bunun mekaniğini yaz.
-@export var is_not_player_object : bool = false ## Playerin icinde olan bir nesneden yollayacaksak paketi
+## If true, onlu lobby owner will send the packet.
+@export var is_only_lobby_owner : bool = false 
 
 @export_group("NODES","object")
-@export var object_player : Node ## Karakteri sec eger lobby owner yollayacaksa gerek yok
-#@export var non_player : bool = false
-#@export var player : Node ## If it is a synchronization for a character, select your character from here. ( Like Camera and Camera Position ). If non-player is true you dont need to select any node.
+@export var object_player : Node ## Select player if its not player or not inside player you can make 'is_only_lobby_owner' true.
 
 @export_group("")
 @export var Position : bool = true
@@ -64,10 +61,7 @@ func _ready():
 	init_pos_timer()
 	init_rot_timer()
 	init_scl_timer()
-	if is_not_player_object and object_player.name != str(NetworkManager.STEAM_ID):
-		posTimer.stop()
-		rotTimer.stop()
-		sclTimer.stop()
+
 	if is_only_lobby_owner == false and object_player.name != str(NetworkManager.STEAM_ID):
 		posTimer.stop()
 		rotTimer.stop()

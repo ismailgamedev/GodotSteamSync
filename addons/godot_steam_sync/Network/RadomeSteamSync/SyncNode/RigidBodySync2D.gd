@@ -1,4 +1,4 @@
-class_name RigidBodySync extends Synchronizer
+class_name RigidBodySync2D extends Synchronizer
 
 var packet_index_velo : int = 0
 var packet_index_ang_velo : int = 0
@@ -10,8 +10,8 @@ var packet_index_ang_velo : int = 0
 var transform_buffer : Array = [null,null]
 var last_index_buffer : PackedInt32Array = [0,0]
 
-var last_velocity : Vector3 = Vector3.ZERO
-var last_angular_velocity : Vector3 = Vector3.ZERO
+var last_velocity : Vector2 = Vector2.ZERO
+var last_angular_velocity : Vector2 = Vector2.ZERO
 
 var velTimer : Timer
 var angularTimer : Timer
@@ -49,6 +49,13 @@ func _on_vel_timer_timeout():
 		P2P._send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_UNRELIABLE)
 		packet_index_velo = packet_index_velo + 1
 		last_velocity = get_parent().linear_velocity
+
+func _on_angular_timer_timeout():
+	if get_parent().angular_velocity != last_angular_velocity and NetworkManager.GAME_STARTED:
+		var DATA : Dictionary = {"Idx":packet_index_ang_velo,"player_id":NetworkManager.STEAM_ID,"TYPE":NetworkManager.TYPES.RIGIDBODY_SYNC,"value":get_parent().angular_velocity,"node_path":get_path(),"property":"angular_velocity"}
+		P2P._send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_UNRELIABLE)
+		packet_index_ang_velo = packet_index_ang_velo + 1
+		last_angular_velocity = get_parent().angular_velocity
 		
 func _process(delta):
 	if transform_buffer[0] != null and NetworkManager.GAME_STARTED:
@@ -61,9 +68,3 @@ func _process(delta):
 			last_index_buffer[1] = transform_buffer[1]["Idx"]
 
 
-func _on_angular_timer_timeout():
-	if get_parent().angular_velocity != last_angular_velocity and NetworkManager.GAME_STARTED:
-		var DATA : Dictionary = {"Idx":packet_index_ang_velo,"player_id":NetworkManager.STEAM_ID,"TYPE":NetworkManager.TYPES.RIGIDBODY_SYNC,"value":get_parent().angular_velocity,"node_path":get_path(),"property":"angular_velocity"}
-		P2P._send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_UNRELIABLE)
-		packet_index_ang_velo = packet_index_ang_velo + 1
-		last_angular_velocity = get_parent().angular_velocity

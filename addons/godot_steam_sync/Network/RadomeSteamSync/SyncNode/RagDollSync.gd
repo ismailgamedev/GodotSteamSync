@@ -2,10 +2,12 @@
 class_name RagDollSync extends Synchronizer
 
 @export_group("SETTINGS","is")
-@export var is_only_lobby_owner : bool = false ## Sadece Lobby Owner Gonderecek
+## If true, onlu lobby owner will send the packet.
+@export var is_only_lobby_owner : bool = false 
 
 @export_group("NODES","object")
-@export var object_player : Node ## Karakteri sec eger lobby owner yollayacaksa gerek yok
+## Select player if its not player or not inside player you can make 'is_only_lobby_owner' true.
+@export var object_player : Node 
 
 @export var interpolation : float = 0.35
 

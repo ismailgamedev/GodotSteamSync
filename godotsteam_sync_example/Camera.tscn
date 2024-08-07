@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dyh2oje8ngq8c"]
 
 [ext_resource type="Script" path="res://godotsteam_sync_example/Camera.gd" id="1_rk4c6"]
-[ext_resource type="Script" path="res://addons/godot_steam_sync/Network/RadomeSteamSync/SyncNode/TransformSync.gd" id="2_0iynb"]
+[ext_resource type="Script" path="res://addons/godot_steam_sync/Network/RadomeSteamSync/SyncNode/TransformSync3D.gd" id="2_0iynb"]
 [ext_resource type="Script" path="res://addons/godot_steam_sync/Network/RadomeSteamSync/SyncNode/Voice.gd" id="3_g0vfu"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_75ugj"]
