@@ -22,7 +22,7 @@ var packet_index_scale : int = 0
 
 
 var last_pos : Vector2 = Vector2.ZERO
-var last_rot : Vector2 = Vector3.ZERO
+var last_rot : Vector2 = Vector2.ZERO
 var last_scale : Vector2 = Vector2.ZERO
 
 var transform_buffer : Array = [null,null,null]
