@@ -36,6 +36,7 @@ func _ready():
 				_:
 					instance_player.transform.origin = spawn_pos.transform.origin + Vector3(0, 0, 0)  
 			players_parent_node.add_child(instance_player)
+			
 			if instance_player.name == str(NetworkManager.STEAM_ID):
 				instance_player.make_owner()
 			NetworkManager.GAME_STARTED = true
@@ -44,6 +45,7 @@ func _ready():
 			var instance_player : Node = NetworkManager.player.instantiate()
 			instance_player.name = str(NetworkManager.LOBBY_MEMBERS[player]["steam_id"])
 			var direction = spawn_check() 
+
 			match direction:
 				"CENTER":
 					instance_player.position = spawn_pos.position + Vector2(0, 0)
@@ -60,7 +62,7 @@ func _ready():
 				instance_player.make_owner()
 			NetworkManager.GAME_STARTED = true
 
-func spawn_check():
+func spawn_check() -> String:
 	match spawn_distance_axis:
 		0:
 			return "CENTER"
@@ -80,4 +82,4 @@ func spawn_check():
 			return "XYZ"   
 		_:
 			return "CENTER"  
-	
+	return "CENTER"

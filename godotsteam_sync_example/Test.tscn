@@ -23,8 +23,7 @@ glow_enabled = true
 script = ExtResource("1_a26tm")
 spawn_pos = NodePath("../SpawnPos")
 players_parent_node = NodePath("../Players")
-spawn_distance_axis = 3
-increase_spawn_distance = Vector3(1, 1, 0)
+increase_spawn_distance = Vector3(1, 0, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lmp12")
