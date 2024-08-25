@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://b6cayd3b3bb5r"]
+[gd_scene load_steps=6 format=3 uid="uid://dhi5myb4u2mij"]
 
-[ext_resource type="Script" path="res://godotsteam_sync_example/test.gd" id="1_mynb7"]
+[ext_resource type="Script" path="res://addons/godot_steam_sync/Network/RadomeSteamSync/NetworkPlayerSpawner.gd" id="1_a26tm"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ilft6"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -18,7 +18,13 @@ glow_enabled = true
 [sub_resource type="BoxMesh" id="BoxMesh_li3io"]
 
 [node name="Test" type="Node"]
-script = ExtResource("1_mynb7")
+
+[node name="NetworkPlayerSpawner" type="Node" parent="." node_paths=PackedStringArray("spawn_pos", "players_parent_node")]
+script = ExtResource("1_a26tm")
+spawn_pos = NodePath("../SpawnPos")
+players_parent_node = NodePath("../Players")
+spawn_distance_axis = 3
+increase_spawn_distance = Vector3(1, 1, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lmp12")

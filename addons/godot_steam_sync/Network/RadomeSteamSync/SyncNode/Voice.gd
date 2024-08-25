@@ -56,7 +56,7 @@ func check_for_voice() -> void:
 	if available_voice['result'] == Steam.VOICE_RESULT_OK and available_voice['buffer'] > 0:
 		
 		var voice_data: Dictionary = Steam.getVoice()
-		if voice_data['result'] == Steam.VOICE_RESULT_OK and voice_data['written']:
+		if voice_data['result'] == Steam.VOICE_RESULT_OK:
 			
 			DATA["voice_data"] = voice_data
 			
@@ -93,21 +93,20 @@ func process_voice_data(voice_data: Dictionary) -> void:
 	
 	var decompressed_voice: Dictionary = Steam.decompressVoice(
 			voice_data['buffer'], 
-			voice_data['written'], 
 			current_sample_rate)
 			
 	if (
 			not decompressed_voice['result'] == Steam.VOICE_RESULT_OK
-			or decompressed_voice['size'] == 0
+
 	):
 		return
-	
+
 	if local_playback != null:
 		if local_playback.get_frames_available() <= 0:
 			return
 		
 		local_voice_buffer = decompressed_voice['uncompressed']
-		local_voice_buffer.resize(decompressed_voice['size'])
+
 		
 		for i: int in range(0, mini(local_playback.get_frames_available() * 2, local_voice_buffer.size()), 2):
 			var raw_value = local_voice_buffer.decode_s16(i)
