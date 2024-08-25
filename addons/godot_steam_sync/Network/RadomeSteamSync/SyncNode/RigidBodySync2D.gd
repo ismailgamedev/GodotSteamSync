@@ -11,7 +11,7 @@ var transform_buffer : Array = [null,null]
 var last_index_buffer : PackedInt32Array = [0,0]
 
 var last_velocity : Vector2 = Vector2.ZERO
-var last_angular_velocity : Vector2 = Vector2.ZERO
+var last_angular_velocity : float = 0
 
 var velTimer : Timer
 var angularTimer : Timer
