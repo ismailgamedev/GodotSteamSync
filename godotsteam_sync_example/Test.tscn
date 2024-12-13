@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dhi5myb4u2mij"]
+[gd_scene load_steps=11 format=3 uid="uid://dhi5myb4u2mij"]
 
 [ext_resource type="Script" path="res://addons/godot_steam_sync/Network/RadomeSteamSync/NetworkPlayerSpawner.gd" id="1_a26tm"]
+[ext_resource type="Script" path="res://addons/godot_steam_sync/Network/RadomeSteamSync/SyncNode/RigidBodySync3D.gd" id="2_io2do"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ilft6"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -16,6 +17,16 @@ tonemap_mode = 2
 glow_enabled = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_li3io"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_io4rt"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="SphereMesh" id="SphereMesh_jxxnq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cdfuw"]
+albedo_color = Color(0.415686, 1, 1, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ktxia"]
 
 [node name="Test" type="Node"]
 
@@ -37,8 +48,12 @@ shadow_enabled = true
 [node name="SpawnPos" type="Marker3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(3.83187, 0, 0, 0, 1, 0, 0, 0, 3.64697, 0, -3.98574, 0)
+transform = Transform3D(49.9588, 0, 0, 0, 1, 0, 0, 0, 61.4249, 0, -3.98574, 0)
 mesh = SubResource("BoxMesh_li3io")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(49.9588, 0, 0, 0, 1, 0, 0, 0, 61.4249, 0, -3.98574, 0)
+shape = SubResource("ConcavePolygonShape3D_io4rt")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(3.83187, 0, 0, 0, 1, 0, 0, 0, 3.64697, 8.40614, -1.16665, 0)
@@ -55,3 +70,16 @@ mesh = SubResource("BoxMesh_li3io")
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
 transform = Transform3D(3.83187, 0, 0, 0, 1, 0, 0, 0, 3.64697, -1.87859, -1.16665, 6.10618)
 mesh = SubResource("BoxMesh_li3io")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.20984, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+mesh = SubResource("SphereMesh_jxxnq")
+surface_material_override/0 = SubResource("StandardMaterial3D_cdfuw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("SphereShape3D_ktxia")
+
+[node name="RigidBodySync3D" type="Node" parent="RigidBody3D"]
+script = ExtResource("2_io2do")
