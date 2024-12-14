@@ -13,7 +13,7 @@ var pTimer : Timer
 func init_timer():
 	pTimer = Timer.new()
 	pTimer.process_callback = Timer.TIMER_PROCESS_PHYSICS
-	pTimer.wait_time = 0.1
+	pTimer.wait_time = 1.0 /30.0
 	add_child(pTimer)
 	pTimer.autostart = true
 	pTimer.start()
