@@ -1,13 +1,11 @@
 class_name RigidBodySync3D extends Synchronizer
 
+@export var interpolation_value = 0.3
+
 var packet_index: int = 0
-
-
-var transform_buffer  = null
-var last_index_buffer : int = 0
-
+var state_data  = null
+var last_index : int = 0
 var last_pos : Vector3 = Vector3.ZERO 
-
 var pTimer : Timer
 
 func init_timer():
@@ -31,26 +29,26 @@ func _on_timer_timeout():
 		packet_index = packet_index + 1
 		last_pos = get_parent().position
 
-var lerp_speed = 0.3
+
 
 func update_physics_values():
-	var target_linear_velocity = transform_buffer["value"][0]
-	var target_angular_velocity = transform_buffer["value"][1]
-	var target_position = transform_buffer["value"][2]
-	var target_rotation = transform_buffer["value"][3]
+	var target_linear_velocity = state_data["value"][0]
+	var target_angular_velocity = state_data["value"][1]
+	var target_position = state_data["value"][2]
+	var target_rotation = state_data["value"][3]
 	# Linear velocity için Lerp
-	get_parent().linear_velocity = lerp(get_parent().linear_velocity, target_linear_velocity, lerp_speed)
+	get_parent().linear_velocity = lerp(get_parent().linear_velocity, target_linear_velocity, interpolation_value)
 	# Angular velocity için Lerp
-	get_parent().angular_velocity = lerp(get_parent().angular_velocity, target_angular_velocity, lerp_speed)
+	get_parent().angular_velocity = lerp(get_parent().angular_velocity, target_angular_velocity, interpolation_value)
 	# Position için Lerp
-	get_parent().position = lerp(get_parent().position, target_position, lerp_speed)
+	get_parent().position = lerp(get_parent().position, target_position, interpolation_value)
 	# Rotation için Lerp (Quaternion için)
-	get_parent().rotation = lerp(get_parent().rotation , target_rotation, lerp_speed)
+	get_parent().rotation = lerp(get_parent().rotation , target_rotation, interpolation_value)
 
 func _physics_process(delta: float) -> void:
 	await get_tree().create_timer(0.1).timeout
-	if transform_buffer != null and NetworkManager.GAME_STARTED:
-		if transform_buffer["Idx"] >= last_index_buffer :
+	if state_data != null and NetworkManager.GAME_STARTED:
+		if state_data["Idx"] >= last_index :
 			update_physics_values()
 			
-			last_index_buffer = transform_buffer["Idx"]
+			last_index = state_data["Idx"]
