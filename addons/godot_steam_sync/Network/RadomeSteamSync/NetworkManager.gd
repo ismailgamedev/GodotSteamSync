@@ -15,7 +15,7 @@ var IS_READY : Dictionary = {}
 
 enum TYPES {START,READY,START_SCENE,TRANFORM_SYNC,PROPERTY,EVENT,RIGIDBODY_SYNC,SCENE_LOADED,COMMAND,VOICE,RAGDOLL}
 
-@onready var player = preload("res://godotsteam_sync_example/Camera.tscn")
+@onready var player = preload("res://godotsteam_sync_example/fpc/character.tscn")
 
 
 #region Initilazation

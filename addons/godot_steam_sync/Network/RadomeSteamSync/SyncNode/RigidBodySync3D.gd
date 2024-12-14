@@ -3,7 +3,7 @@ class_name RigidBodySync3D extends Synchronizer
 var packet_index: int = 0
 
 
-var transform_buffer : Dictionary 
+var transform_buffer  = null
 var last_index_buffer : int = 0
 
 var last_pos : Vector3 = Vector3.ZERO 
@@ -32,6 +32,7 @@ func _on_timer_timeout():
 		last_pos = get_parent().position
 		
 func _physics_process(delta: float) -> void:
+	await get_tree().create_timer(0.1).timeout
 	if transform_buffer != null and NetworkManager.GAME_STARTED:
 		if transform_buffer["Idx"] >= last_index_buffer :
 			get_parent().linear_velocity = transform_buffer["value"][0]
