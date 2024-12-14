@@ -13,7 +13,7 @@ var pTimer : Timer
 func init_timer():
 	pTimer = Timer.new()
 	pTimer.process_callback = Timer.TIMER_PROCESS_PHYSICS
-	pTimer.wait_time = 1.0 /30.0
+	pTimer.wait_time = 1.0 /60.0
 	add_child(pTimer)
 	pTimer.autostart = true
 	pTimer.start()
@@ -30,14 +30,23 @@ func _on_timer_timeout():
 		P2P._send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_UNRELIABLE)
 		packet_index = packet_index + 1
 		last_pos = get_parent().position
-		
+
+var lerp_speed = 0.1 
+
+func update_physics_values():
+	var target_linear_velocity = transform_buffer["value"][0]
+	var target_angular_velocity = transform_buffer["value"][1]
+	var target_position = transform_buffer["value"][2]
+	var target_rotation = transform_buffer["value"][3]
+	get_parent().linear_velocity = get_parent().linear_velocity.linear_interpolate(target_linear_velocity, lerp_speed)
+	get_parent().angular_velocity = get_parent().angular_velocity.linear_interpolate(target_angular_velocity, lerp_speed)
+	get_parent().position = get_parent().position.linear_interpolate(target_position, lerp_speed)
+	get_parent().rotation = lerp_angle(get_parent().rotation, target_rotation, lerp_speed)
+
 func _physics_process(delta: float) -> void:
 	await get_tree().create_timer(0.1).timeout
 	if transform_buffer != null and NetworkManager.GAME_STARTED:
 		if transform_buffer["Idx"] >= last_index_buffer :
-			get_parent().linear_velocity = transform_buffer["value"][0]
-			get_parent().angular_velocity = transform_buffer["value"][1]
-			get_parent().position = transform_buffer["value"][2]
-			get_parent().rotation = transform_buffer["value"][3]
+			update_physics_values()
 			
 			last_index_buffer = transform_buffer["Idx"]
