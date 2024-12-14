@@ -26,7 +26,7 @@ func _ready():
 	
 func _on_timer_timeout():
 	if get_parent().position != last_pos and NetworkManager.GAME_STARTED:
-		var DATA : Dictionary = {"Idx":packet_index,"player_id":NetworkManager.STEAM_ID,"TYPE":NetworkManager.TYPES.RIGIDBODY_SYNC,"value":[get_parent().linear_velocity,get_parent().angular_velocity,get_parent().position,get_parent().rotation],"node_path":get_path()}
+		var DATA : Dictionary = {"Idx":packet_index,"player_id":NetworkManager.STEAM_ID,"TYPE":NetworkManager.TYPES.RIGIDBODY_SYNC,"value":[get_parent().linear_velocity,get_parent().angular_velocity,get_parent().position,get_parent().rotation_degrees],"node_path":get_path()}
 		P2P._send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_UNRELIABLE)
 		packet_index = packet_index + 1
 		last_pos = get_parent().position
@@ -45,7 +45,7 @@ func update_physics_values():
 	# Position için Lerp
 	get_parent().position = lerp(get_parent().position, target_position, lerp_speed)
 	# Rotation için Lerp (Quaternion için)
-	get_parent().rotation = lerp_angle(get_parent().rotation, target_rotation, lerp_speed)
+	get_parent().rotation_degrees = lerp_angle(get_parent().rotation_degrees, target_rotation, lerp_speed)
 
 func _physics_process(delta: float) -> void:
 	await get_tree().create_timer(0.1).timeout
