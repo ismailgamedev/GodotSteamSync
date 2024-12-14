@@ -13,7 +13,7 @@ var pTimer : Timer
 func init_timer():
 	pTimer = Timer.new()
 	pTimer.process_callback = Timer.TIMER_PROCESS_PHYSICS
-	pTimer.wait_time = 1.0 /60.0
+	pTimer.wait_time = 1.0 /30.0
 	add_child(pTimer)
 	pTimer.autostart = true
 	pTimer.start()
@@ -31,7 +31,7 @@ func _on_timer_timeout():
 		packet_index = packet_index + 1
 		last_pos = get_parent().position
 
-var lerp_speed = 0.1 
+var lerp_speed = 0.3
 
 func update_physics_values():
 	var target_linear_velocity = transform_buffer["value"][0]
