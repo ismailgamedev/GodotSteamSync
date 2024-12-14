@@ -38,9 +38,13 @@ func update_physics_values():
 	var target_angular_velocity = transform_buffer["value"][1]
 	var target_position = transform_buffer["value"][2]
 	var target_rotation = transform_buffer["value"][3]
-	get_parent().linear_velocity = get_parent().linear_velocity.linear_interpolate(target_linear_velocity, lerp_speed)
-	get_parent().angular_velocity = get_parent().angular_velocity.linear_interpolate(target_angular_velocity, lerp_speed)
-	get_parent().position = get_parent().position.linear_interpolate(target_position, lerp_speed)
+	# Linear velocity için Lerp
+	get_parent().linear_velocity = lerp(get_parent().linear_velocity, target_linear_velocity, lerp_speed)
+	# Angular velocity için Lerp
+	get_parent().angular_velocity = lerp(get_parent().angular_velocity, target_angular_velocity, lerp_speed)
+	# Position için Lerp
+	get_parent().position = lerp(get_parent().position, target_position, lerp_speed)
+	# Rotation için Lerp (Quaternion için)
 	get_parent().rotation = lerp_angle(get_parent().rotation, target_rotation, lerp_speed)
 
 func _physics_process(delta: float) -> void:
