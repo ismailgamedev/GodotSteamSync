@@ -100,8 +100,7 @@ func handle_property_packets(READABLE):
 		get_tree().root.get_node(READABLE["node_path"]).transform_buffer = READABLE
 				
 	if READABLE["TYPE"] == NetworkManager.TYPES.RIGIDBODY_SYNC and NetworkManager.GAME_STARTED:
-		if READABLE["property"] == "linear_velocity":
-			get_tree().root.get_node(READABLE["node_path"]).transform_buffer[0] = READABLE
+		get_tree().root.get_node(READABLE["node_path"]).transform_buffer = READABLE
 	
 	if READABLE["TYPE"] == NetworkManager.TYPES.PROPERTY and NetworkManager.GAME_STARTED:
 		if !READABLE["interpolated"]:
