@@ -769,6 +769,8 @@ MarginContainer/constants/margin_top = 10
 [sub_resource type="SphereShape3D" id="SphereShape3D_k4wwl"]
 
 [node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH")]
+collision_layer = 2
+collision_mask = 3
 script = SubResource("GDScript_r0lhh")
 default_reticle = "res://godotsteam_sync_example/fpc/reticles/reticle_1.tscn"
 HEAD = NodePath("Head")
