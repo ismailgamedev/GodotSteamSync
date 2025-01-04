@@ -11,5 +11,10 @@ func call_f(method : String,args = null):
 	
 func _on_func_called(method, args):
 	if  NetworkManager.GAME_STARTED:
-		var DATA : Dictionary = {"player_id":NetworkManager.STEAM_ID,"TYPE":NetworkManager.TYPES.EVENT,"args":args,"node_path":get_parent().get_path(),"method":method}
+		var DATA : Dictionary = {
+			"PI":NetworkManager.STEAM_ID,
+			"T":NetworkManager.TYPES.EVENT,
+			"args":args,
+			"NP":get_parent().get_path(),
+			"method":method}
 		P2P._send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_RELIABLE)

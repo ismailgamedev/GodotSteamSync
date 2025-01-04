@@ -29,7 +29,7 @@ func _read_P2P_Packet() -> void:
 		var READABLE: Dictionary = bytes_to_var(packet_code.decompress_dynamic(-1, FileAccess.COMPRESSION_GZIP))
 		
 			# Append logic here to deal with packet data
-		if READABLE.has("TYPE"):
+		if READABLE.has("T"):
 			handle_packets(READABLE)
 
 	#endregion
@@ -42,7 +42,7 @@ func _read_All_P2P_Packets(read_count: int = 0) -> void:
 		_read_P2P_Packet()
 		_read_All_P2P_Packets(read_count + 1)
 var packet_size : float
-func _send_P2P_Packet(channel: int,target: int, packet_data: Dictionary,send_type: int) -> bool:
+func send_P2P_Packet(channel: int,target: int, packet_data: Dictionary,send_type: int) -> bool:
 	# Create a data array to send the data through
 	var this_data: PackedByteArray
 
@@ -63,57 +63,55 @@ func _send_P2P_Packet(channel: int,target: int, packet_data: Dictionary,send_typ
 	return false
 func handle_start_packet(READABLE):
 	# This packet reading when someone ready
-	if READABLE["TYPE"] == NetworkManager.TYPES.READY:
-		NetworkManager.IS_READY[READABLE["steam_id"]] = READABLE["ready"]
-	# This packet reading when lobby leader change_scene
-	#if READABLE["TYPE"] == NetworkManager.TYPES.START_SCENE:
-		#SceneManager.change_scene(READABLE["scene"])
+	if READABLE["T"] == NetworkManager.SEND_TYPE.READY:
+		for member in NetworkManager.MEMBERS_DATA:
+			if member["steam_id"] == READABLE["PI"]:
+				member["ready"] = READABLE["ready"]
 
-	#
 		
 func handle_event_packets(READABLE):
-	if READABLE["TYPE"] == NetworkManager.TYPES.COMMAND:
+	if READABLE["T"] == NetworkManager.SEND_TYPE.COMMAND:
 		print("COMMAND:" + READABLE["method"] + str(READABLE["args"]))
 		if READABLE["args"] != null:
 			Command.callv(READABLE["method"],READABLE["args"])
 		else:
 			Command.call(READABLE["method"])
 			
-	if READABLE['TYPE'] == NetworkManager.TYPES.EVENT:
+	if READABLE['T'] == NetworkManager.SEND_TYPE.EVENT:
 		if READABLE["args"] != null:
-			get_tree().root.get_node(READABLE["node_path"]).callv(READABLE["method"],READABLE["args"]) 
+			get_tree().root.get_node(READABLE["NP"]).callv(READABLE["method"],READABLE["args"]) 
 		else:
-			get_tree().root.get_node(READABLE["node_path"]).call(READABLE["method"])
+			get_tree().root.get_node(READABLE["NP"]).call(READABLE["method"])
 	
 			
 func handle_property_packets(READABLE):	
 	
-	if READABLE['TYPE'] == NetworkManager.TYPES.TRANFORM_SYNC and NetworkManager.GAME_STARTED:
-		if READABLE["property"] == "global_position":
-			get_tree().root.get_node(READABLE["node_path"]).transform_buffer[0] = READABLE
-		if READABLE["property"] == "rotation":
-			get_tree().root.get_node(READABLE["node_path"]).transform_buffer[1] = READABLE
-		if READABLE["property"] == "scale":
-			get_tree().root.get_node(READABLE["node_path"]).transform_buffer[2] = READABLE
+	if READABLE['T'] == NetworkManager.SEND_TYPE.TRANFORM_SYNC and NetworkManager.GAME_STARTED:
+		if READABLE["P"] == "global_position":
+			get_node(READABLE["NP"]).transform_buffer[0] = READABLE
+		if READABLE["P"] == "rotation":
+			get_node(READABLE["NP"]).transform_buffer[1] = READABLE
+		if READABLE["P"] == "scale":
+			get_node(READABLE["NP"]).transform_buffer[2] = READABLE
 
-	if READABLE["TYPE"] == NetworkManager.TYPES.RAGDOLL and NetworkManager.GAME_STARTED:
-		get_tree().root.get_node(READABLE["node_path"]).transform_buffer = READABLE
+	if READABLE["T"] == NetworkManager.SEND_TYPE.RAGDOLL and NetworkManager.GAME_STARTED:
+		get_tree().root.get_node(READABLE["NP"]).transform_buffer = READABLE
 				
-	if READABLE["TYPE"] == NetworkManager.TYPES.RIGIDBODY_SYNC and NetworkManager.GAME_STARTED:
-		get_tree().root.get_node(READABLE["node_path"]).transform_buffer = READABLE
+	if READABLE["T"] == NetworkManager.SEND_TYPE.RIGIDBODY_SYNC and NetworkManager.GAME_STARTED:
+		get_tree().root.get_node(READABLE["NP"]).transform_buffer = READABLE
 	
-	if READABLE["TYPE"] == NetworkManager.TYPES.PROPERTY and NetworkManager.GAME_STARTED:
-		if !READABLE["interpolated"]:
-			get_tree().root.get_node(READABLE["node_path"]).set(READABLE["property"],READABLE["value"])
+	if READABLE["T"] == NetworkManager.SEND_TYPE.PROPERTY and NetworkManager.GAME_STARTED:
+		if !READABLE["ITP"]:
+			get_tree().root.get_node(READABLE["NP"]).set(READABLE["P"],READABLE["V"])
 		else:
-			var DATA :Array = [READABLE["property"],READABLE["value"]]
-			get_tree().root.get_node(READABLE["node_path"]).DATA = DATA
+			var DATA :Array = [READABLE["P"],READABLE["V"]]
+			get_tree().root.get_node(READABLE["NP"]).DATA = DATA
 	## 
 	
 	
 func handle_voice(READABLE):
-	if READABLE["TYPE"] == NetworkManager.TYPES.VOICE and NetworkManager.GAME_STARTED:
-		get_tree().root.get_node(READABLE["node_path"]).process_voice_data(READABLE["voice_data"])
+	if READABLE["T"] == NetworkManager.SEND_TYPE.VOICE and NetworkManager.GAME_STARTED:
+		get_tree().root.get_node(READABLE["NP"]).process_voice_data(READABLE["voice_data"])
 		#await get_tree().create_timer(0.1).timeout
 
 func handle_packets(READABLE):

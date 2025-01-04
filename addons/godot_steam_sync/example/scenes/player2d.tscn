@@ -1,0 +1,64 @@
+[gd_scene load_steps=5 format=3 uid="uid://5o24adttr213"]
+
+[ext_resource type="Script" path="res://addons/godot_steam_sync/example/scenes/player_2d.gd" id="1_g8jf3"]
+[ext_resource type="Texture2D" uid="uid://bpo8pbwcpfbyv" path="res://addons/godot_steam_sync/example/assets/2d/char.png" id="2_1lbm1"]
+[ext_resource type="Script" path="res://addons/godot_steam_sync/Network/RadomeSteamSync/SyncNode/TransformSync2D.gd" id="3_vq2wf"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_njlh8"]
+radius = 3.0
+height = 14.0
+
+[node name="Player2D" type="CharacterBody2D"]
+script = ExtResource("1_g8jf3")
+
+[node name="PlayerSprite" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-34, -4)
+texture = ExtResource("2_1lbm1")
+offset = Vector2(34, -12)
+hframes = 5
+vframes = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -7)
+shape = SubResource("CapsuleShape2D_njlh8")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -25)
+enabled = false
+zoom = Vector2(6.075, 6.075)
+process_callback = 0
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
+
+[node name="Label" type="Label" parent="."]
+offset_left = -7.0
+offset_top = -24.0
+offset_right = 58.0
+offset_bottom = -1.0
+scale = Vector2(0.209397, 0.209397)
+text = "0"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="TransformSync2D" type="Node" parent="." node_paths=PackedStringArray("object_player")]
+script = ExtResource("3_vq2wf")
+object_player = NodePath("..")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_right = 113.0
+offset_bottom = 152.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
+layout_mode = 2

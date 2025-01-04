@@ -62,7 +62,13 @@ func _process(delta):
 func _on_timer_timeout():
 	for property in property_list.size():
 		if property_type[property] != get_parent().get(property_list[property]) and NetworkManager.GAME_STARTED: 
-			var DATA : Dictionary = {"player_id":NetworkManager.STEAM_ID,"TYPE":NetworkManager.TYPES.PROPERTY,"value":get_parent().get(property_list[property]),"node_path":path,"property":property_list[property],"interpolated":is_interpolated}
+			var DATA : Dictionary = {
+				"PI":NetworkManager.STEAM_ID,
+				"T":NetworkManager.TYPES.PROPERTY,
+				"V":get_parent().get(property_list[property]),
+				"NP":path,
+				"P":property_list[property],
+				"ITP":is_interpolated}
 			P2P._send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_RELIABLE)
 			property_type[property] = get_parent().get(property_list[property])
 			

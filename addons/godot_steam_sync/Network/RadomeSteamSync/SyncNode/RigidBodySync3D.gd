@@ -24,7 +24,12 @@ func _ready():
 	
 func _on_timer_timeout():
 	if get_parent().position != last_pos and NetworkManager.GAME_STARTED:
-		var DATA : Dictionary = {"Idx":packet_index,"player_id":NetworkManager.STEAM_ID,"TYPE":NetworkManager.TYPES.RIGIDBODY_SYNC,"value":[get_parent().linear_velocity,get_parent().angular_velocity,get_parent().position,get_parent().rotation],"node_path":get_path()}
+		var DATA : Dictionary = {
+			"I":packet_index,
+			"PI":NetworkManager.STEAM_ID,
+			"T":NetworkManager.TYPES.RIGIDBODY_SYNC,
+			"V":[get_parent().linear_velocity,get_parent().angular_velocity,get_parent().position,get_parent().rotation],
+			"NP":get_path()}
 		P2P._send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_UNRELIABLE)
 		packet_index = packet_index + 1
 		last_pos = get_parent().position
@@ -32,10 +37,10 @@ func _on_timer_timeout():
 
 
 func update_physics_values():
-	var target_linear_velocity = state_data["value"][0]
-	var target_angular_velocity = state_data["value"][1]
-	var target_position = state_data["value"][2]
-	var target_rotation = state_data["value"][3]
+	var target_linear_velocity = state_data["V"][0]
+	var target_angular_velocity = state_data["V"][1]
+	var target_position = state_data["V"][2]
+	var target_rotation = state_data["V"][3]
 	# Linear velocity için Lerp
 	get_parent().linear_velocity = lerp(get_parent().linear_velocity, target_linear_velocity, interpolation_value)
 	# Angular velocity için Lerp
@@ -48,7 +53,7 @@ func update_physics_values():
 func _physics_process(delta: float) -> void:
 	await get_tree().create_timer(0.1).timeout
 	if state_data != null and NetworkManager.GAME_STARTED:
-		if state_data["Idx"] >= last_index :
+		if state_data["I"] >= last_index :
 			update_physics_values()
 			
-			last_index = state_data["Idx"]
+			last_index = state_data["I"]

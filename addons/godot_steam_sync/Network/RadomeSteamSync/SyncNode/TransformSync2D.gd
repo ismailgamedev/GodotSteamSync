@@ -1,127 +1,134 @@
 @icon("res://addons/godot_steam_sync/Network/RadomeSteamSync/SyncNode/transformSyncIcon.png")
 class_name TransformSync2D extends Synchronizer
 
-@export_group("SETTINGS","is")
-## If true, onlu lobby owner will send the packet.
-@export var is_only_lobby_owner : bool = false 
+@export_group("SETTINGS")
+@export var is_only_lobby_owner: bool = false
+@export var call_per_seccond_position: float = 20
+@export var call_per_seccond_rotation: float = 20
+@export var call_per_seccond_scale: float = 20
 
-@export_group("NODES","object")
-## Select player if its not player or not inside player you can make 'is_only_lobby_owner' true.
-@export var object_player : Node 
+@export_group("NODES", "object")
+@export var object_player: Node
 
 @export_group("")
-@export var Position : bool = true
-@export var Rotation : bool = false
-@export var Scale : bool = false
+@export var Position: bool = true
+@export var Rotation: bool = false
+@export var Scale: bool = false
 
+var packet_index_pos: int = 0
+var packet_index_rot: int = 0
+var packet_index_scale: int = 0
 
-var packet_index_pos : int = 0
-var packet_index_rot : int = 0
-var packet_index_scale : int = 0
+var last_pos: Vector2 = Vector2.ZERO
+var last_rot: float = 0
+var last_scale: Vector2 = Vector2.ZERO
 
+var transform_buffer: Array = [null, null, null]
+var last_index_buffer: PackedInt32Array = [0, 0, 0]
 
+var IS_OWNER: bool = true
 
-var last_pos : Vector2 = Vector2.ZERO
-var last_rot : float = 0
-var last_scale : Vector2 = Vector2.ZERO
+var elapsed_time_pos: float = 0
+var elapsed_time_rot: float = 0
+var elapsed_time_scale: float = 0
 
-var transform_buffer : Array = [null,null,null]
-var last_index_buffer : PackedInt32Array = [0,0,0]
+var interval_pos: float = 1
+var interval_rot: float = 1
+var interval_scale: float = 1
 
-var posTimer : Timer
-var rotTimer : Timer
-var sclTimer : Timer
-
-
-func init_pos_timer():
-	posTimer = Timer.new()
-	posTimer.process_callback = Timer.TIMER_PROCESS_PHYSICS
-	posTimer.wait_time = 0.1
-	add_child(posTimer)
-	posTimer.autostart = true
-	posTimer.start()
-	posTimer.connect("timeout",_on_pos_timer_timeout)
-func init_rot_timer():
-	rotTimer = Timer.new()
-	rotTimer.process_callback = Timer.TIMER_PROCESS_PHYSICS
-	rotTimer.wait_time = 0.1
-	add_child(rotTimer)
-	rotTimer.autostart = true
-	rotTimer.start()
-	rotTimer.connect("timeout",_on_rot_timer_timeout)
-func init_scl_timer():
-	sclTimer = Timer.new()
-	sclTimer.process_callback = Timer.TIMER_PROCESS_PHYSICS
-	sclTimer.wait_time = 0.1
-	add_child(sclTimer)
-	sclTimer.autostart = true
-	sclTimer.start()
-	sclTimer.connect("timeout",_on_scale_timer_timeout)
+var interpolation_offset_ms: int = 100
+var pos_buffer: Array[Dictionary] = []
 
 func _ready():
-	init_pos_timer()
-	init_rot_timer()
-	init_scl_timer()
+	if NetworkManager.GAME_STARTED:
+		interval_pos = 1 / call_per_seccond_position
+		interval_rot = 1 / call_per_seccond_rotation
+		interval_scale = 1 / call_per_seccond_scale
+		if not is_only_lobby_owner and object_player.name != str(NetworkManager.STEAM_ID):
+			IS_OWNER = false
+		elif is_only_lobby_owner and Steam.getLobbyOwner(NetworkManager.LOBBY_ID) != NetworkManager.STEAM_ID:
+			IS_OWNER = false
 
-	if is_only_lobby_owner == false and object_player.name != str(NetworkManager.STEAM_ID):
-		posTimer.stop()
-		rotTimer.stop()
-		sclTimer.stop()
-	elif is_only_lobby_owner:
-		if Steam.getLobbyOwner(NetworkManager.LOBBY_ID) != NetworkManager.STEAM_ID: 
-			posTimer.stop()
-			rotTimer.stop()
-			sclTimer.stop()
-	
+func get_current_unix_time_ms() -> int:
+	return Time.get_unix_time_from_system() * 1000
+
+func sync_transform(last_property, packet_index_property: int, property_name: String):
+	if get_parent().get(property_name) != last_property:
+		var DATA: Dictionary = {
+			"I": packet_index_property + 1,
+			"PI": NetworkManager.STEAM_ID,
+			"TS": get_current_unix_time_ms(),
+			"T": NetworkManager.SEND_TYPE.TRANFORM_SYNC,
+			"V": get_parent().get(property_name),
+			"NP": get_path(),
+			"P": property_name
+		}
+		P2P.send_P2P_Packet(0, 0, DATA, Steam.P2PSend.P2P_SEND_UNRELIABLE)
+		packet_index_property += 1
+		last_property = get_parent().get(property_name)
+	return last_property
+
+func recalculate_interpolation_offset_ms(interpolation_factor: float):
+	if interpolation_factor > 1 and interpolation_offset_ms < 500:
+		interpolation_offset_ms += 1
+	elif interpolation_factor < 0 and interpolation_offset_ms > 1:
+		interpolation_offset_ms -= 1
+
+func read_transform(transform_buffer_index: int):
+	var render_time := get_current_unix_time_ms() - interpolation_offset_ms
+
+	if transform_buffer[transform_buffer_index] != null and NetworkManager.GAME_STARTED:
+		if transform_buffer[transform_buffer_index]["I"] >= last_index_buffer[transform_buffer_index]:
+			pos_buffer.append(transform_buffer[transform_buffer_index])
 			
-	if !Position:
-		posTimer.stop()
-	if !Rotation:
-		rotTimer.stop()
-	if !Scale:
-		sclTimer.stop()
-		
-func _on_pos_timer_timeout():
-	if get_parent().global_position != last_pos and NetworkManager.GAME_STARTED:
-		var DATA : Dictionary = {"Idx":packet_index_pos + 1,"player_id":NetworkManager.STEAM_ID,"TYPE":NetworkManager.TYPES.TRANFORM_SYNC,"value":get_parent().global_position,"node_path":get_path(),"property":"global_position"}	
-		P2P._send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_UNRELIABLE)
-		packet_index_pos = packet_index_pos + 1
-		last_pos = get_parent().global_position
+			
+			
+			if pos_buffer.size() > 2:
+				while pos_buffer.size() > 2 and render_time > pos_buffer[1]["TS"]:
+					pos_buffer.remove_at(0)
 
-func _on_rot_timer_timeout():
-	if get_parent().rotation != last_rot and NetworkManager.GAME_STARTED:
-		var DATA : Dictionary = {"Idx":packet_index_rot + 1,"player_id":NetworkManager.STEAM_ID,"TYPE":NetworkManager.TYPES.TRANFORM_SYNC,"value":get_parent().rotation,"node_path":get_path(),"property":"rotation"}	
-		P2P._send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_UNRELIABLE)
-		packet_index_rot = packet_index_rot + 1
-		last_rot = get_parent().rotation
+				if pos_buffer.size() < 2:
+					return
 
-func _on_scale_timer_timeout():
-	if get_parent().scale != last_scale and NetworkManager.GAME_STARTED:
-		var DATA : Dictionary = {"Idx":packet_index_scale + 1,"player_id":NetworkManager.STEAM_ID,"TYPE":NetworkManager.TYPES.TRANFORM_SYNC,"value":get_parent().scale,"node_path":get_path(),"property":"scale"}	
-		P2P._send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_UNRELIABLE)
-		packet_index_scale = packet_index_scale + 1
-		last_scale = get_parent().scale
+				var start_pos = pos_buffer[0]["V"]
+				var end_pos = pos_buffer[1]["V"]
+				var start_time = pos_buffer[0]["TS"]
+				var end_time = pos_buffer[1]["TS"]
 
-func _process(delta):
-	if transform_buffer[0] != null and NetworkManager.GAME_STARTED:
-		if transform_buffer[0]["Idx"] >= last_index_buffer[0] :
-			var lerped_value = lerp(get_parent().get(transform_buffer[0]["property"]),transform_buffer[0]["value"],0.1)
-			get_parent().set(transform_buffer[0]["property"],lerped_value)
-			last_index_buffer[0] = transform_buffer[0]["Idx"]
-	# Rotation
-	if transform_buffer[1] != null and NetworkManager.GAME_STARTED:
-		if transform_buffer[1]["Idx"] >= last_index_buffer[1]:
-			var lerped_value = lerp(get_parent().get(transform_buffer[1]["property"]),transform_buffer[1]["value"],0.1)
-			get_parent().set(transform_buffer[1]["property"],lerped_value)
-			last_index_buffer[1] = transform_buffer[1]["Idx"]
-	# Scale
-	if transform_buffer[2] != null and NetworkManager.GAME_STARTED:
-		if transform_buffer[2]["Idx"] >= last_index_buffer[2]:
-			var lerped_value = lerp(get_parent().get(transform_buffer[2]["property"]),transform_buffer[2]["value"],0.1)
-			get_parent().set(transform_buffer[2]["property"],lerped_value)
-			last_index_buffer[2] = transform_buffer[2]["Idx"]
-func abort():
-	posTimer.stop()
-	rotTimer.stop()
-	sclTimer.stop()
-	set_process(false)
+				var time_diff := float(end_time - start_time)
+				#if time_diff < 50:
+					#return
+
+				var interpolation_factor: float = float(render_time - start_time) / time_diff
+				interpolation_factor = clamp(interpolation_factor, 0.0, 0.95)
+				print("interpolation_factor: ", interpolation_factor)
+				var lerped_value = lerp(start_pos, end_pos, interpolation_factor)
+				get_parent().set(transform_buffer[transform_buffer_index]["P"], lerped_value)
+				last_index_buffer[transform_buffer_index] = transform_buffer[transform_buffer_index]["I"]
+
+
+
+func _process(delta: float) -> void:
+	if not IS_OWNER:
+		if Position:
+			read_transform(0)
+		if Rotation:
+			read_transform(1)
+		if Scale:
+			read_transform(2)
+	else:
+		if Position:
+			elapsed_time_pos += delta
+			while elapsed_time_pos >= interval_pos:
+				elapsed_time_pos -= interval_pos
+				last_pos = sync_transform(last_pos, packet_index_pos, "global_position")
+		if Rotation:
+			elapsed_time_rot += delta
+			while elapsed_time_rot >= interval_rot:
+				elapsed_time_rot -= interval_rot
+				last_rot = sync_transform(last_rot, packet_index_rot, "rotation")
+		if Scale:
+			elapsed_time_scale += delta
+			while elapsed_time_scale >= interval_scale:
+				elapsed_time_scale -= interval_scale
+				last_scale = sync_transform(last_scale, packet_index_scale, "scale")

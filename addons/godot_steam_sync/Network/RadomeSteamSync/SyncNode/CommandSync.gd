@@ -2,8 +2,8 @@ extends Node
 
 @onready var loadingScreen = preload("res://addons/godot_steam_sync/SceneChanger/LoadingScreen.tscn")
 func send(method : String,args = null):
-	var DATA : Dictionary = {"player_id":NetworkManager.STEAM_ID,"TYPE":NetworkManager.TYPES.COMMAND,"args":args,"method":method}
-	P2P._send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_RELIABLE)
+	var DATA : Dictionary = {"PI":NetworkManager.STEAM_ID,"T":NetworkManager.SEND_TYPE.COMMAND,"args":args,"method":method}
+	P2P.send_P2P_Packet(0,0, DATA,Steam.P2P_SEND_RELIABLE)
 	
 	
 func start_scene(scene : String):

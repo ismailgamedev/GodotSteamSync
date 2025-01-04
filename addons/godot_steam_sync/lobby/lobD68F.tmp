@@ -1,0 +1,333 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8hvptl6vtavm"]
+
+[ext_resource type="Script" path="res://addons/godot_steam_sync/lobby/lobby.gd" id="1_8nr7f"]
+[ext_resource type="Script" path="res://addons/godot_steam_sync/lobby/profile.gd" id="2_iu6ti"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_013y3"]
+bg_color = Color(0.158472, 0.158472, 0.158472, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Lobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8nr7f")
+
+[node name="BG" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LobbyMain" type="Panel" parent="CenterContainer"]
+custom_minimum_size = Vector2(500, 350)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/LobbyMain"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/LobbyMain/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/LobbyMain/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 41
+text = "LOBBY MENU"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OpenLobbyCreateBtn" type="Button" parent="CenterContainer/LobbyMain/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+text = "Create Lobby
+"
+
+[node name="OpenJoinLobbyBtn" type="Button" parent="CenterContainer/LobbyMain/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+text = "Join Lobby"
+
+[node name="CreateLobbyMenu" type="Panel" parent="CenterContainer"]
+visible = false
+custom_minimum_size = Vector2(500, 350)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/CreateLobbyMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/CreateLobbyMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LobbyNameTxt" type="TextEdit" parent="CenterContainer/CreateLobbyMenu/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+placeholder_text = "Lobby Name"
+
+[node name="LobbyMaxPlayerList" type="OptionButton" parent="CenterContainer/CreateLobbyMenu/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+selected = 1
+item_count = 3
+popup/item_0/text = "2 Player"
+popup/item_1/text = "4 Player"
+popup/item_1/id = 1
+popup/item_2/text = "8 Player"
+popup/item_2/id = 2
+
+[node name="VisibilityLobbyOptBtn" type="OptionButton" parent="CenterContainer/CreateLobbyMenu/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+selected = 2
+item_count = 3
+popup/item_0/text = "Private"
+popup/item_1/text = "Friends Only"
+popup/item_1/id = 1
+popup/item_2/text = "Public"
+popup/item_2/id = 2
+
+[node name="CreateLobbyBtn" type="Button" parent="CenterContainer/CreateLobbyMenu/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+text = "Create Lobby"
+
+[node name="JoinLobbyMenu" type="Panel" parent="CenterContainer"]
+visible = false
+custom_minimum_size = Vector2(500, 350)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/JoinLobbyMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/JoinLobbyMenu/MarginContainer"]
+layout_mode = 2
+
+[node name="SettingsPanel" type="PanelContainer" parent="CenterContainer/JoinLobbyMenu/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32.505)
+layout_mode = 2
+
+[node name="VBoxContainer1" type="HBoxContainer" parent="CenterContainer/JoinLobbyMenu/MarginContainer/VBoxContainer/SettingsPanel"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/JoinLobbyMenu/MarginContainer/VBoxContainer/SettingsPanel/VBoxContainer1"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="DistanceFilterOpt" type="OptionButton" parent="CenterContainer/JoinLobbyMenu/MarginContainer/VBoxContainer/SettingsPanel/VBoxContainer1/MarginContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+selected = 3
+item_count = 4
+popup/item_0/text = "Close"
+popup/item_1/text = "Default"
+popup/item_1/id = 1
+popup/item_2/text = "Far"
+popup/item_2/id = 2
+popup/item_3/text = "Worldwide"
+popup/item_3/id = 3
+
+[node name="Server" type="Label" parent="CenterContainer/JoinLobbyMenu/MarginContainer/VBoxContainer/SettingsPanel/VBoxContainer1"]
+layout_mode = 2
+text = "Server Count:"
+
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/JoinLobbyMenu/MarginContainer/VBoxContainer/SettingsPanel/VBoxContainer1"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="RefreshBtn" type="Button" parent="CenterContainer/JoinLobbyMenu/MarginContainer/VBoxContainer/SettingsPanel/VBoxContainer1/MarginContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "refresh"
+
+[node name="LobbyListPanel" type="PanelContainer" parent="CenterContainer/JoinLobbyMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/JoinLobbyMenu/MarginContainer/VBoxContainer/LobbyListPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/JoinLobbyMenu/MarginContainer/VBoxContainer/LobbyListPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="LobbyListContainer" type="VBoxContainer" parent="CenterContainer/JoinLobbyMenu/MarginContainer/VBoxContainer/LobbyListPanel/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 9
+
+[node name="LobbyMenu" type="Panel" parent="CenterContainer"]
+visible = false
+custom_minimum_size = Vector2(500, 350)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/LobbyMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/LobbyMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CenterContainer/LobbyMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="CenterContainer/LobbyMenu/MarginContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ReadyCheckBox" type="CheckBox" parent="CenterContainer/LobbyMenu/MarginContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Ready"
+
+[node name="StartBtn" type="Button" parent="CenterContainer/LobbyMenu/MarginContainer/HBoxContainer/VBoxContainer2"]
+visible = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Start"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/LobbyMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LobbyNameLbl" type="Label" parent="CenterContainer/LobbyMenu/MarginContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 57)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_013y3")
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer/LobbyMenu/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/LobbyMenu/MarginContainer/HBoxContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/LobbyMenu/MarginContainer/HBoxContainer/VBoxContainer/PanelContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="MemberCont" type="VBoxContainer" parent="CenterContainer/LobbyMenu/MarginContainer/HBoxContainer/VBoxContainer/PanelContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="BackBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -155.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = 64.0
+grow_horizontal = 0
+text = "Back"
+
+[node name="ProfileCont" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -168.0
+offset_top = -68.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("2_iu6ti")
+
+[node name="SteamUserNameLbl" type="Label" parent="ProfileCont"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "SteamName"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="AvatarTexture" type="TextureRect" parent="ProfileCont"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 10
+expand_mode = 2
+
+[connection signal="pressed" from="CenterContainer/LobbyMain/MarginContainer/VBoxContainer/OpenLobbyCreateBtn" to="." method="_on_open_lobby_create_btn_pressed"]
+[connection signal="pressed" from="CenterContainer/LobbyMain/MarginContainer/VBoxContainer/OpenJoinLobbyBtn" to="." method="_on_open_join_lobby_btn_pressed"]
+[connection signal="pressed" from="CenterContainer/CreateLobbyMenu/MarginContainer/VBoxContainer/CreateLobbyBtn" to="." method="_on_create_lobby_btn_pressed"]
+[connection signal="pressed" from="CenterContainer/JoinLobbyMenu/MarginContainer/VBoxContainer/SettingsPanel/VBoxContainer1/MarginContainer2/RefreshBtn" to="." method="_on_refresh_btn_pressed"]
+[connection signal="toggled" from="CenterContainer/LobbyMenu/MarginContainer/HBoxContainer/VBoxContainer2/ReadyCheckBox" to="." method="_on_ready_check_box_toggled"]
+[connection signal="pressed" from="CenterContainer/LobbyMenu/MarginContainer/HBoxContainer/VBoxContainer2/StartBtn" to="." method="_on_start_btn_pressed"]
+[connection signal="pressed" from="BackBtn" to="." method="_on_back_btn_pressed"]

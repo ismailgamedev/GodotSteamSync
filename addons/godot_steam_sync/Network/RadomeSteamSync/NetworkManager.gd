@@ -7,15 +7,15 @@ var IS_OWNED: bool = false
 var STEAM_ID: int = 0
 var STEAM_USERNAME: String = "No one"
 var LOBBY_ID: int = 0
-var LOBBY_MEMBERS: Array = []
+var LOBBY_MEMBERS: Array[Dictionary] = []
 var DATA : Dictionary
 var LOBBY_MAX_MEMBERS: int = 4
 var GAME_STARTED : bool = false
-var IS_READY : Dictionary = {}
+var MEMBERS_DATA : Array[Dictionary] = []
 
-enum TYPES {START,READY,START_SCENE,TRANFORM_SYNC,PROPERTY,EVENT,RIGIDBODY_SYNC,SCENE_LOADED,COMMAND,VOICE,RAGDOLL}
+enum SEND_TYPE {START,READY,HANDSHAKE,START_SCENE,TRANFORM_SYNC,PROPERTY,EVENT,RIGIDBODY_SYNC,SCENE_LOADED,COMMAND,VOICE,RAGDOLL}
 
-@onready var player = preload("res://godotsteam_sync_example/fpc/character.tscn")
+@onready var player = preload("res://addons/godot_steam_sync/example/scenes/player2d.tscn")
 
 
 #region Initilazation

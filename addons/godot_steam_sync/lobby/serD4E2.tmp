@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2nowxo7tva01"]
+
+[ext_resource type="Script" path="res://addons/steam-sync/lobby/server_banner.gd" id="1_h2q3m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56bc8"]
+bg_color = Color(0.295867, 0.295867, 0.295866, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="ServerBanner" type="Panel"]
+custom_minimum_size = Vector2(440, 47.37)
+theme_override_styles/panel = SubResource("StyleBoxFlat_56bc8")
+script = ExtResource("1_h2q3m")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+
+[node name="PlayersLbl" type="Label" parent="HBoxContainer/MarginContainer2"]
+layout_mode = 2
+text = "4/32"
+
+[node name="LobbyNameLbl" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "asdasdasdasdasdasdasdassdassd"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="JoinToLobby" type="Button" parent="HBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(62.945, 0)
+layout_mode = 2
+text = "Join"
+
+[connection signal="pressed" from="HBoxContainer/MarginContainer/JoinToLobby" to="." method="_on_join_to_lobby_pressed"]
