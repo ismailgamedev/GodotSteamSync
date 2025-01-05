@@ -39,76 +39,53 @@ var interval_scale: float = 1
 var interpolation_offset_ms: int = 100
 var pos_buffer: Array[Dictionary] = []
 
+#var Cposition : Vector2 = Vector2.ZERO
+#var Crotation : float = 0
+#var Cscale :Vector2 = Vector2.ZERO
+
+var parent : Node2D
+
 func _ready():
 	if NetworkManager.GAME_STARTED:
 		interval_pos = 1 / call_per_seccond_position
 		interval_rot = 1 / call_per_seccond_rotation
 		interval_scale = 1 / call_per_seccond_scale
+		
 		if not is_only_lobby_owner and object_player.name != str(NetworkManager.STEAM_ID):
 			IS_OWNER = false
 		elif is_only_lobby_owner and Steam.getLobbyOwner(NetworkManager.LOBBY_ID) != NetworkManager.STEAM_ID:
 			IS_OWNER = false
-
-func get_current_unix_time_ms() -> int:
-	return Time.get_unix_time_from_system() * 1000
+		parent = get_parent()
+		
+		#Cposition = parent.global_position
+		#Crotation = parent.rotation
+		#Cscale = parent.scale
 
 func sync_transform(last_property, packet_index_property: int, property_name: String):
-	if get_parent().get(property_name) != last_property:
+	if parent.get(property_name) != last_property:
 		var DATA: Dictionary = {
 			"I": packet_index_property + 1,
 			"PI": NetworkManager.STEAM_ID,
-			"TS": get_current_unix_time_ms(),
 			"T": NetworkManager.SEND_TYPE.TRANFORM_SYNC,
-			"V": get_parent().get(property_name),
+			"V": parent.get(property_name),
 			"NP": get_path(),
 			"P": property_name
 		}
 		P2P.send_P2P_Packet(0, 0, DATA, Steam.P2PSend.P2P_SEND_UNRELIABLE)
 		packet_index_property += 1
-		last_property = get_parent().get(property_name)
+		last_property = parent.get(property_name)
 	return last_property
 
-func recalculate_interpolation_offset_ms(interpolation_factor: float):
-	if interpolation_factor > 1 and interpolation_offset_ms < 500:
-		interpolation_offset_ms += 1
-	elif interpolation_factor < 0 and interpolation_offset_ms > 1:
-		interpolation_offset_ms -= 1
 
 func read_transform(transform_buffer_index: int):
-	var render_time := get_current_unix_time_ms() - interpolation_offset_ms
-
-	if transform_buffer[transform_buffer_index] != null and NetworkManager.GAME_STARTED:
-		if transform_buffer[transform_buffer_index]["I"] >= last_index_buffer[transform_buffer_index]:
-			pos_buffer.append(transform_buffer[transform_buffer_index])
+	var data : Dictionary = transform_buffer[transform_buffer_index]
+	if data != null and NetworkManager.GAME_STARTED:
+		if data["I"] >= last_index_buffer[transform_buffer_index]:
+			var lerped_value = lerp(parent.get(data["P"]),data["V"],0.45)
+			parent.set(data["P"],lerped_value)
+			last_index_buffer[transform_buffer_index] = data["I"]
 			
-			
-			
-			if pos_buffer.size() > 2:
-				while pos_buffer.size() > 2 and render_time > pos_buffer[1]["TS"]:
-					pos_buffer.remove_at(0)
-
-				if pos_buffer.size() < 2:
-					return
-
-				var start_pos = pos_buffer[0]["V"]
-				var end_pos = pos_buffer[1]["V"]
-				var start_time = pos_buffer[0]["TS"]
-				var end_time = pos_buffer[1]["TS"]
-
-				var time_diff := float(end_time - start_time)
-				#if time_diff < 50:
-					#return
-
-				var interpolation_factor: float = float(render_time - start_time) / time_diff
-				interpolation_factor = clamp(interpolation_factor, 0.0, 0.95)
-				print("interpolation_factor: ", interpolation_factor)
-				print("time_diff: ", interpolation_factor)
-				var lerped_value = lerp(start_pos, end_pos, interpolation_factor)
-				get_parent().set(transform_buffer[transform_buffer_index]["P"], lerped_value)
-				last_index_buffer[transform_buffer_index] = transform_buffer[transform_buffer_index]["I"]
-
-
-
+		
 func _process(delta: float) -> void:
 	if not IS_OWNER:
 		if Position:
