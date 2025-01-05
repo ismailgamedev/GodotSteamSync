@@ -102,6 +102,7 @@ func read_transform(transform_buffer_index: int):
 				var interpolation_factor: float = float(render_time - start_time) / time_diff
 				interpolation_factor = clamp(interpolation_factor, 0.0, 0.95)
 				print("interpolation_factor: ", interpolation_factor)
+				print("time_diff: ", interpolation_factor)
 				var lerped_value = lerp(start_pos, end_pos, interpolation_factor)
 				get_parent().set(transform_buffer[transform_buffer_index]["P"], lerped_value)
 				last_index_buffer[transform_buffer_index] = transform_buffer[transform_buffer_index]["I"]
