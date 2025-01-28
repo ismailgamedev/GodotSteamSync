@@ -100,7 +100,7 @@ func handle_property_packets(READABLE):
 		get_tree().root.get_node(READABLE["node_path"]).transform_buffer = READABLE
 				
 	if READABLE["TYPE"] == NetworkManager.TYPES.RIGIDBODY_SYNC and NetworkManager.GAME_STARTED:
-		get_tree().root.get_node(READABLE["node_path"]).transform_buffer = READABLE
+		get_tree().root.get_node(READABLE["node_path"]).state_data = READABLE
 	
 	if READABLE["TYPE"] == NetworkManager.TYPES.PROPERTY and NetworkManager.GAME_STARTED:
 		if !READABLE["interpolated"]:
