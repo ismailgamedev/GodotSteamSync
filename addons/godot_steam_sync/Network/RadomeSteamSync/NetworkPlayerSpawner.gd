@@ -1,85 +1,51 @@
-class_name NetworkPlayerSpawner extends Node
+extends Node
+class_name PlayerSpawner 
 
-## Where the players will be spawned.
-@export var spawn_pos : Node  
-## The node the players will be in after they are spawned. It has to be at the center of the scene. It has to be named 'Players'.
-@export var players_parent_node : Node
-## Here you can choose which way each spawned player will move. If you choose an axis, the player born will automatically move one unit away. If the game is 2D, choosing the Z axis means the center.
-@export_flags("X" ,"Y" ,"Z") var spawn_distance_axis = 1 
+var players_parent_node : Node3D = Node3D.new()
+@export var spawn_positions : Array[Marker3D]
 
-@export var increase_spawn_distance : Vector3 
 
-func _ready(): 
+var object_spawn_finished : bool = false 
+
+
+
+func _ready() -> void:
+	if multiplayer.get_unique_id() != 1:
+		SceneLoader.scene_loaded.rpc_id(1)
+	else:
+		SceneLoader.scene_loaded_server()
+	
+
+
 	players_parent_node.name = "Players"
-	if spawn_pos is Node3D:
-		for player in NetworkManager.LOBBY_MEMBERS.size():
-			var instance_player : Node = NetworkManager.player.instantiate()
-			instance_player.name = str(NetworkManager.LOBBY_MEMBERS[player]["steam_id"])
-			var direction = spawn_check() 
-			match direction:
-				"CENTER":
-					instance_player.transform.origin = spawn_pos.transform.origin + Vector3(0, 0, 0)
-				"X":
-					instance_player.transform.origin = spawn_pos.transform.origin + Vector3(player + increase_spawn_distance.x, 0, 0)
-				"Y":
-					instance_player.transform.origin = spawn_pos.transform.origin + Vector3(0, player + increase_spawn_distance.y, 0)
-				"Z":
-					instance_player.transform.origin = spawn_pos.transform.origin + Vector3(0, 0, player + increase_spawn_distance.z)
-				"XY":
-					instance_player.transform.origin = spawn_pos.transform.origin + Vector3(player + increase_spawn_distance.x, player + increase_spawn_distance.y, 0)
-				"XZ":
-					instance_player.transform.origin = spawn_pos.transform.origin + Vector3(player + increase_spawn_distance.x, 0, player + increase_spawn_distance.z)
-				"YZ":
-					instance_player.transform.origin = spawn_pos.transform.origin + Vector3(0, player + increase_spawn_distance.y, player + increase_spawn_distance.z)
-				"XYZ":
-					instance_player.transform.origin = spawn_pos.transform.origin + Vector3(player + increase_spawn_distance.x, player + increase_spawn_distance.y, player + increase_spawn_distance.z)
-				_:
-					instance_player.transform.origin = spawn_pos.transform.origin + Vector3(0, 0, 0)  
-			players_parent_node.add_child(instance_player)
+	players_parent_node.position = Vector3(0,0,0)
+	# Add Players Node to the scene. Players will be inside of this Node.
+	get_tree().current_scene.call_deferred("add_child",players_parent_node)
+	if NetworkManager.is_lobby_owner():
+		for i in NetworkManager.network_data.MULTIPLAYER_MEMBERS.size():
+			var id : int =NetworkManager.network_data.MULTIPLAYER_MEMBERS[i]
+			print(id)
+			var instance_player = NetworkManager.player.instantiate()
+			instance_player.name = str(id)
 			
-			if instance_player.name == str(NetworkManager.STEAM_ID):
-				instance_player.make_owner()
-			NetworkManager.GAME_STARTED = true
-	if spawn_pos is Node2D:
-		for player in NetworkManager.LOBBY_MEMBERS.size():
-			var instance_player : Node = NetworkManager.player.instantiate()
-			instance_player.name = str(NetworkManager.LOBBY_MEMBERS[player]["steam_id"])
-			var direction = spawn_check() 
-
-			match direction:
-				"CENTER":
-					instance_player.position = spawn_pos.position + Vector2(0, 0)
-				"X":
-					instance_player.position = spawn_pos.position + Vector2(player + increase_spawn_distance.x, 0)
-				"Y":
-					instance_player.position = spawn_pos.position + Vector2(0, player + increase_spawn_distance.y)
-				"XY":
-					instance_player.position = spawn_pos.position + Vector2(player + increase_spawn_distance.x, player + increase_spawn_distance.y)
-				_:
-					instance_player.position = spawn_pos.position + Vector2(0, 0)  
-			players_parent_node.add_child(instance_player)
-			if instance_player.name == str(NetworkManager.STEAM_ID):
-				instance_player.make_owner()
-			NetworkManager.GAME_STARTED = true
-
-func spawn_check() -> String:
-	match spawn_distance_axis:
-		0:
-			return "CENTER"
-		1:
-			return "X"
-		2:
-			return "Y"
-		3:
-			return "XY"
-		4:
-			return "Z"
-		5:
-			return "XZ"
-		6:
-			return "YZ"
-		7:
-			return "XYZ"   
-		_:
-			return "CENTER"  
-	return "CENTER"
+			await get_tree().process_frame 
+			
+			var position_index = i % spawn_positions.size()
+			var spawn_position = spawn_positions[position_index].global_position
+			var spawn_rotation = spawn_positions[position_index].rotation
+			
+			instance_player.global_position = spawn_position
+			instance_player.rotation = spawn_rotation
+			
+			players_parent_node.call_deferred("add_child",instance_player)
+	else:
+		for i in NetworkManager.network_data.MULTIPLAYER_MEMBERS.size():
+			var id : int =NetworkManager.network_data.MULTIPLAYER_MEMBERS[i]
+			var instance_player = NetworkManager.player.instantiate()
+			instance_player.name = str(id)
+			
+			
+			
+			
+			players_parent_node.call_deferred("add_child",instance_player)
+		

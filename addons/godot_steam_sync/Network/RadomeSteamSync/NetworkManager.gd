@@ -26,7 +26,7 @@ func _ready() -> void:
 		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN
 func _initialize_Steam() -> void:
 	if Engine.has_singleton("Steam"):
-		var INIT: Dictionary = Steam.steamInitEx(true,480)
+		var INIT : Dictionary = Steam.get_steam_init_result()
 
 		# If the status isn't one, print out the possible error and quit the program
 		if INIT['status'] != 0:

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://d26bfvwtqaeqw"]
 
-[ext_resource type="Script" path="res://addons/godot_steam_sync/Lobby/lobby_member.gd" id="1_vi8x1"]
+[ext_resource type="Script" uid="uid://d23rn6cynib3x" path="res://addons/godot_steam_sync/Lobby/lobby_member.gd" id="1_vi8x1"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_x51ve"]
 font_size = 10

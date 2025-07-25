@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://1d2bxfqc4m8x"]
 
-[ext_resource type="Script" path="res://addons/godot_steam_sync/Lobby/main_menu.gd" id="1_6wvtt"]
+[ext_resource type="Script" uid="uid://b2x0n5v0rrmc3" path="res://addons/godot_steam_sync/Lobby/main_menu.gd" id="1_6wvtt"]
 
 [sub_resource type="SystemFont" id="SystemFont_j72ml"]
 font_names = PackedStringArray("Sylfaen")

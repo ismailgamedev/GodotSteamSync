@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cliutsom3dxmu"]
 
-[ext_resource type="Script" path="res://addons/godot_steam_sync/Lobby/lobby.gd" id="1_2lhov"]
+[ext_resource type="Script" uid="uid://cr4f4mho577y3" path="res://addons/godot_steam_sync/Lobby/lobby.gd" id="1_2lhov"]
 
 [node name="LobbyMenu" type="Control"]
 layout_mode = 3
